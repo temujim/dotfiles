@@ -1,10 +1,23 @@
+"::::==-- BASIC  --==:::: {{{
+"mappings "
+let mapleader = "\<Space>"
+let localmapleader = ","
+
 " disable legacy VI mode
 " default install of VIM are in legacy mode
 set nocompatible
 
-"
-"::::==-- START PLUGIN --==::::
+" change to current file directory
+" set autochdir
+""" this is not good since yo uare not longer able to change directory in CTRLP
+
+""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"::::==-- PLUGIN --==:::: {{{
 " VUNDLE | VIM Plugins 
+
+" vim setting to run Vundle"
+filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -15,7 +28,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-
 "-- NerdTree
 Plugin 'scrooloose/nerdtree'
 "" open a NERDTree automatically when Vim Starts
@@ -25,14 +37,26 @@ Plugin 'scrooloose/nerdtree'
 "autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " Close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+"map <silent> <leader><C-n> :NERDTreeFind<cr>
+"map <silent> <leader>t :NERDTreeToggle<cr>
 
-"-- CTRL+P
+"-our CTRL+P
 Plugin 'ctrlpvim/ctrlp.vim'
 " include hidden files in search
 let g:ctrlp_show_hidden = 1
 " Persist cache between sessions
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_use_caching = 1
+"let g:ctrlp_mruf_exclude = '/tmp/.*\|/temp/.*|\.ipynb$' " MacOSX/Linux
+"let g:ctrlp_mruf_include = '\.py$\|\.txt$'
+" added to test ginore files
+"let g:ctrlp_custom_ignore = {
+"  \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
+"  \ 'file': '\.so$\|\.dat$|\.DS_Store$|\.ipynb$,\.swo$'
+"  \ }
+
+
+
 
 "-- Vim.WIki
 Plugin 'vimwiki/vimwiki'
@@ -46,6 +70,14 @@ Plugin 'tomasr/molokai'
 " vim-tmux navigator
 Plugin 'christoomey/vim-tmux-navigator'
 
+" Seiya - Make vim Transparent 
+Plugin 'miyakogi/seiya.vim'
+" make vim transparent every start.
+let g:seiya_auto_enable=1
+
+" Close buffer
+Plugin 'rbgrouleff/bclose.vim'
+
 " Vim airline for status/tabline
 " airline is 100%vim script, no python needed
 " powerline requires python
@@ -57,9 +89,81 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 1
 let g:airline#extensions#tabline#show_close_button = 1
 let g:airline_powerline_fonts = 1
+" for tmuxline + vim-airline integration
+let g:airline#extensions#tmuxline#enabled = 1
+" start tmuxline even without vim running
+let airline#extensions#tmuxline#snapshot_file = "~/.tmux-status.conf"
 
-" zshrc vim mode
+" tmux+vim share powerline status
+Plugin 'edkolev/tmuxline.vim'
+
+" zshrc vim mode, test only
 "Plugin 'file:///home/linus/.vim/bundle/vi-mode'
+
+" Surround.vim to quickly/better wrapping in VIM
+Plugin 'tpope/vim-surround'
+
+" Vim Python Syntax Highlighter, added #Mar2020
+Plugin 'vim-python/python-syntax'
+let g:python_highlight_all = 1
+
+
+    
+" Python VIM Folding, added #Mar2020
+" NOTE: THEI IS NOTE WORKING, CAN BE REMOVED!
+" note Used really, can be disabled"
+Plugin 'tmhedberg/SimpylFold'
+let g:SimpylFold_docstring_preview = 1
+
+" Autcloser for VIM python
+Plugin 'Raimondi/delimitMate'
+            
+" FZF for VIm
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+imap <c-x><c-f> <plug>(fzf-complete-path)
+
+" Autoscroll Vim
+" Plugin 'vim-scripts/autoscroll.vim' "Disregarded since not useful
+map <F6> <C-E>:sleep 4000m<CR>j<F6>
+map <F7> <C-Y>:sleep 4000m<CR>k<F7>
+
+
+" Jupyter Mode in Vim
+Plugin 'jupyter-vim/jupyter-vim'
+" ---- INSTALLED VIRTUAL ENV"
+" Always use the same virtualenv for vim, regardless of what Python
+" environment is loaded in the shell from which vim is launched
+" let g:vim_virtualenv_path = '/home/barca/py-env/jupy-vim'
+" if exists('g:vim_virtualenv_path')
+"     pythonx import os; import vim
+"     pythonx activate_this = os.path.join(vim.eval('g:vim_virtualenv_path'), 'bin/activate')
+"     pythonx with open(activate_this) as f: exec(f.read(), {'__file__': activate_this})
+" endif
+let g:jupyter_mapkeys = 0
+
+" Always use the same virtualenv for vim, regardless of what Python
+" environment is loaded in the shell from which vim is launched
+let g:vim_virtualenv_path = '/home/barca/py-env/jupy-vim'
+"let g:vim_virtualenv_path = '/usr/bin/anaconda3'
+if exists('g:vim_virtualenv_path')
+    pythonx import os; import vim
+    pythonx activate_this = os.path.join(vim.eval('g:vim_virtualenv_path'), 'bin/activate_this.py')
+    pythonx with open(activate_this) as f: exec(f.read(), {'__file__': activate_this})
+endif
+
+
+
+
+
+
+
+
+" Add icons in NerdTree
+Plugin 'ryanoasis/vim-devicons'
+
+" Asynchonouse Syntax Chcker
+" Plugin 'w0rp/ale'  "disabled since I did not find this useful
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -80,10 +184,13 @@ filetype plugin indent on    " required, equivalent below
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-"::::==-- END PLUGIN --==::::
+" setting for vim-dev icons setting"
+" set guifont=Inconsolata\ Nerd\ Font\ Complete\ 12
+set encoding=utf-8
 
-""""""""""""""""""""""""""""""""""
-""" Vim Apperaance
+""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"::::==-- VISUALS --==:::: {{{
 
 " set the theme to murhpy
 " applies to gVim only
@@ -94,6 +201,20 @@ colo molokai
 
 " Enable syntax highlighting
 syntax on
+" set vimrc syntax highlighting
+" THIS IS NOT WORKING, so can be deleted, added Mar2020
+""""""""
+"augroup fvimrc
+"  au!
+"  autocmd BufNewFile,BufRead .vimrc set syntax=vim
+"augroup END
+
+" Sets the color of matchin parenthesis
+hi MatchParen ctermfg=34 ctermbg=238 cterm=bold
+" Color for matching brackets
+" set showmatch
+" set matchtime=10
+
 
 " Show number lines
 set nu
@@ -106,13 +227,18 @@ set numberwidth=2
 set relativenumber
 
 " highlight linec containing the cursor
-set cursorline
+" set cursorline
+augroup cursorline
+    autocmd!
+    autocmd WinLeave,BufLeave * set nocursorline
+    autocmd WinEnter,BufEnter * set cursorline
+augroup end
 
-""""""""""""""""""""""""""""""""
-"    Navigation Settings
 
-""""""""""""""""""""""""""""""""
 
+""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"::::==-- Navigation --==:::: {{{ 
 " Make backspace work like most apps
 " Set unrestricted backspacing in insert mode
 " Value   Effect
@@ -130,8 +256,9 @@ nnoremap <silent> <bs> :TmuxNavigateLeft<cr>
 " h,l VIM navs and <> Keyboard Arrow keys, [] Arrow keys 'value' in Insert Mode
 set whichwrap+=h,l,<,>,[,]
 
-"""""""""""""""""""""""""""""""
-" Keyboard Mapping
+""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"::::==-- Mappings --==:::: {{{
 
  " Navigate properly when lines are wrapped
 nnoremap j gj
@@ -152,9 +279,57 @@ nnoremap k gk
 
 " Map Leader key to spacebar
 "
-:let mapleader = "\<Space>"
+
+
+
+" NERDtree mapping, to go to file location
+nnoremap <leader><c-o> :NERDTreeFind<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Run current file
+nnoremap <Leader>r :JupyterRunFile<CR>
+" nnoremap <buffer> <silent> <localleader>I :PythonImportThisFile<CR>
+
+" Change to directory of current file
+nnoremap <buffer> <silent> <localleader>d :JupyterCd %:p:h<CR>
+
+" Send a selection of lines
+nnoremap <Leader>e :JupyterSendCell<CR>
+" nnoremap <buffer> <silent> <localleader>E :JupyterSendRange<CR>
+" nmap     <buffer> <silent> <localleader>e <Plug>JupyterRunTextObj
+" vmap     <buffer> <silent> <localleader>e <Plug>JupyterRunVisual
+" 
+" nnoremap <buffer> <silent> <localleader>U :JupyterUpdateShell<CR>
+" 
+" " Debugging maps
+" nnoremap <buffer> <silent> <localleader>b :PythonSetBreak<CR>
+
+""""""""""""""""""""
+
+" Run current file
+" nnoremap <buffer> <silent> <localleader>R :JupyterRunFile<CR>
+" nnoremap <buffer> <silent> <localleader>I :PythonImportThisFile<CR>
+" 
+" " Change to directory of current file
+" nnoremap <buffer> <silent> <localleader>d :JupyterCd %:p:h<CR>
+" 
+" " Send a selection of lines
+" nnoremap <buffer> <silent> <localleader>X :JupyterSendCell<CR>
+" nnoremap <buffer> <silent> <localleader>E :JupyterSendRange<CR>
+" nmap     <buffer> <silent> <localleader>e <Plug>JupyterRunTextObj
+" vmap     <buffer> <silent> <localleader>e <Plug>JupyterRunVisual
+" 
+" nnoremap <buffer> <silent> <localleader>U :JupyterUpdateShell<CR>
+" 
+" " Debugging maps
+" nnoremap <buffer> <silent> <localleader>b :PythonSetBreak<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
 
 " quicker global copy-pasting to Vim to windows
+" global registers requires gVim, vim-gtk
 nnoremap <Leader>y "+y
 nnoremap <Leader>p "+p
 vnoremap <Leader>y "+y
@@ -165,12 +340,23 @@ nnoremap <Leader><Leader> <C-^>
 nnoremap <Leader>b :bprev<CR>
 " go to previous buffer
 nnoremap <Leader>f :bnext<CR>
+" close buffer
+nnoremap <Leader>c :Bclose<CR>
 "quit buffer
 nnoremap <Leader>q :quit<CR>    
 "save file
 nnoremap <Leader>w :write<CR>   
 "save and exit
 nnoremap <Leader>x :xit<CR>     
+
+" SURROUND.VIM MAPPING
+" Wrap with  `
+" THIS IS NOT WORKING
+" Probably because of the <leader> ' is current bookmark?
+nnoremap <Leader>` ysiw`
+" Wrap with " 
+nnoremap <Leader>" ysiw"
+
 
 " Split navigation, pane nav shortcuts
 "#Taken care by vim-tmux navigator plugin now
@@ -185,8 +371,39 @@ xnoremap <C-k> <C-w>k
 xnoremap <C-h> <C-w>h
 xnoremap <C-l> <C-w>l
 
-"""""""""""""""""""""""""""""""
-" Autocompletion
+" Global yank of file to register
+noremap <silent> <F4> :let @+=expand("%:p")<CR>
+" https://stackoverflow.com/questions/916875/yank-file-name-path-of-current-buffer-in-vim
+
+" auto-closing brackets for python
+" source: https://stackoverflow.com/questions/21316727/automatic-closing-brackets-for-vim
+" did use these mapping since delimitate extension was used 
+" inoremap " ""<left>
+" inoremap ' ''<left>
+" inoremap ( ()<left>
+" inoremap [ []<left>
+" inoremap { {}<left>
+" inoremap {<CR> {<CR>}<ESC>O
+" inoremap {;<CR> {<CR>};<ESC>O
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+" Run python code directly, added Mar2020
+"autocmd FileType python map <buffer> <F9> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+"autocmd FileType python imap <buffer> <F9> <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+
+"autocmd Filetype python nnoremap <buffer> <F5> :w<CR>:ter python2 "%"<CR>
+"autocmd Filetype python nnoremap <buffer> <F6> :w<CR>:vert ter python3 "%"<CR>
+autocmd Filetype python nnoremap <buffer> <F8> :w<CR>:ter python3 "%"<CR>
+
+"map <F8> :w<CR>:!python %<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"::::==-- Autocompletion --==:::: {{{
 
 " enable wildcard for autocompletion
 " enables the menu of wildecard at the bottom
@@ -199,9 +416,10 @@ set wildmode=longest:list,full
 
 " Exclude files in wildmode
 set wildignore+=*.a,*.o
-set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.exe,*.pdf,*.zip,*.djvu,*.xls,*.xlsx,*.doc,*.docx,*.mp3
+set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.exe,*.pdf,*.zip,*.djvu,*.xls,*.xlsx,*.doc,*.docx,*.mp3,*.ipynb,*.bak,*.bz2,*.mp4,*.pptx
 set wildignore+=.DS_Store,.git,.hg,.svn
-set wildignore+=*~,*.swp,*.tmp
+set wildignore+=*~,*.swp,*.tmp,*.swo
+set wildignore+=*.vim/view  "just added Apr2020 to test the vimview excludsion, and it worked
 
 " mouse testing
 " Currently now working in terminal vim
@@ -209,8 +427,23 @@ set mouse=a
 " enable drag events for terminal 
 set ttymouse=xterm2
 
-""""""""""""""""""""""""""
-" Split settings
+
+" Kite Autocompletion settings
+" This is not working as of now!!!!
+" Keys are still set to default C-N and C-P
+" let g:kite_previous_placeholder = '<C-k>'
+" let g:kite_next_placeholder = '<C-j>'
+" let g:kite_previous_placeholder='<C-K>'
+" let g:kite_next_placeholder='<C-J>'
+
+
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"::::==-- Split --==:::: {{{
 
 " set splitbelow is enough even without condition
 " if condition is copied from Greg Hurrel (FB dev)
@@ -219,11 +452,17 @@ if has('windows')
 endif
 
 if has('vertsplit')
-  set splitright                      " open vertical splits to the right of the current window
+  set splitright                      " open vertical splits to the right of the current winow
 endif
 
-""""""""""""""""""""""""
-" Tab and autoindent
+" Revert session withi zooming 
+" source: https://vi.stackexchange.com/questions/241/undo-only-window 
+nnoremap <C-w>o :mksession! ~/session.vim<CR>:wincmd o<CR>
+nnoremap <C-w>u :source ~/session.vim<CR>
+ 
+""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"::::==-- Tab and AutoIndent  --==:::: {{{
 
 set expandtab   " use spaces instead of tabs
 " uses the "shiftwidth" setting for inserting <TAB>
@@ -245,9 +484,17 @@ set softtabstop=4
 " will drop right below the previous line.
 set ai  "autoindent
 
+" sets the separator vertical split
+" other options: ║   │     █ ▓
+set fillchars+=vert:p,fold:-,stl:=
+" set fillchars+=vert:█,fold:-,stl:=
+set fillchars+=vert:║,fold:-,stl:=
+hi clear VertSplit   " make border color white
 
-""""""""""""""""""""""""""""""
-" Folding
+
+""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+"::::==-- Folds  --==:::: {{{
 " :mkview saves the folds
 " :loadview loads the folds for the file
 "augroup AutoSaveFolds
@@ -255,4 +502,54 @@ set ai  "autoindent
   autocmd BufWinLeave *.* mkview
   autocmd BufWinEnter *.* silent loadview
 "augroup END
+
+set foldmethod=marker
+"set foldmethod=manual
+" set foldmethod=indent
  
+""""""""""""""""""""""""""""""""""""""""""""""}}}
+
+":::==-- VIM Scripts --==::: {{{
+
+"""""""""""""""""""""""""""""""""
+" Script to insert multiple lines
+"""""""""""""""""""""""""""""""""
+" Other options of installing:
+" Create file 
+"    -  ~/.vim/plugin/insertmultiple.vim (Unix) 
+"    -  $HOME/vimfiles/plugin/insertmultiple.vim (Windows) containing the script below, then restart Vim. 
+" Alternatively, add the script to your vimrc and restart Vim.
+
+" Open multiple lines (insert empty lines) before or after current line,
+" and position cursor in the new space, with at least one blank line
+" before and after the cursor.
+function! OpenLines(nrlines, dir)
+  let nrlines = a:nrlines < 3 ? 3 : a:nrlines
+  let start = line('.') + a:dir
+  call append(start, repeat([''], nrlines))
+  if a:dir < 0
+    normal! 2k
+  else
+    normal! 2j
+  endif
+endfunction
+" Mappings to open multiple lines and enter insert mode.
+nnoremap <Leader>o :<C-u>call OpenLines(v:count, 0)<CR>S
+nnoremap <Leader>O :<C-u>call OpenLines(v:count, -1)<CR>S
+
+"""""""""""""""
+" XML folding, if file is XML, foldmethod is set to "indent"
+augroup XML
+    autocmd!
+    autocmd FileType xml setlocal foldmethod=indent foldlevelstart=999 foldminlines=0
+augroup END
+" https://stackoverflow.com/questions/32154285/folding-expanding-and-colapsing-xml-tags-in-vim-xml-parsing
+
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""}}}
+
+if exists("g:loaded_webdevicons")
+  call webdevicons#refresh()
+endif
