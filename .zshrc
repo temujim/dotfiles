@@ -18,10 +18,19 @@ export CHEATCOLORS=true
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-z# sh/wiki/Themes
 # This needs awesome installed
-POWERLEVEL9K_MODE='awesome-fontconfig'
+# POWERLEVEL9K_MODE='awesome-fontconfig'
+POWERLEVEL9K_MODE='nerdfont-complete'
+# font use, Inconsolate Nerd Font Complete
+
+# POWERLEVEL9K_LINUX_ICON='\uF17C'
+# POWERLEVEL9K_LINUX_ICON='\uE0C5'
+POWERLEVEL9K_LINUX_ICON='\uf300'
+
+
 # --
 # custom, added by james
-ZSH_THEME="powerlevel9k/powerlevel9k"
+# ZSH_THEME="powerlevel9k/powerlevel9k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 
 # function virtualenv_info {
@@ -103,13 +112,46 @@ fi
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
-plugins=(zsh-autosuggestions)
-plugins=(oh-my-matrix)
-plugins=(virtualenv)
+# plugins=(git)
+# plugins=(zsh-autosuggestions)
+# plugins=(oh-my-matrix)
+plugins=(
+    virtualenv
+    git
+    zsh-autosuggestions
+)
+
+
+
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv os_icon dir vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status vi_mode)
 POWERLEVEL9K_COLOR_SCHEME='light'
+
+
+# POWERLEVEL9K_VI_INSERT_MODE_STRING="%BINSERT"
+# POWERLEVEL9K_VI_COMMAND_MODE_STRING="%BNORMAL"
+
+
+# POWERLEVEL9K_VI_MODE_INSERT_BACKGROUND='005'
+# POWERLEVEL9K_VI_MODE_INSERT_FOREGROUND='236'
+# POWERLEVEL9K_VI_MODE_NORMAL_BACKGROUND='245'
+POWERLEVEL9K_VI_MODE_NORMAL_FOREGROUND='236'
+
+POWERLEVEL9K_VIRTUALENV_BACKGROUND='none'
+
+POWERLEVEL9K_SHOW_CHANGESET=true
+POWERLEVEL9K_CHANGESET_HASH_LENGTH=6
+
+POWERLEVEL9K_VCS_CLEAN_BACKGROUND='none'
+POWERLEVEL9K_VCS_CLEAN_FOREGROUND='076'
+POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='none'
+POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='005'
+POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='none'
+POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='003'
+
+POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes git-untracked git-aheadbehind git-remotebranch git-tagname)
+
+
 
 source $ZSH/oh-my-zsh.sh
 
@@ -190,13 +232,13 @@ KEYTIMEOUT=1
 
 # show vim status
 # http://zshwiki.org/home/examples/zlewidgets
-function zle-line-init zle-keymap-select {
-    RPS1="${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}"
-    RPS2=$RPS1
-    zle reset-prompt
-}
-zle -N zle-line-init
-zle -N zle-keymap-select
+# function zle-line-init zle-keymap-select {
+#     RPS1="${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}"
+#     RPS2=$RPS1
+#     zle reset-prompt
+# }
+# zle -N zle-line-init
+# zle -N zle-keymap-select
 
 # add missing vim hotkeys
 # http://zshwiki.org/home/zle/vi-mode
