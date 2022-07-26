@@ -1,7 +1,12 @@
+" For testing, matchit plugin
+" not very useful for python as this is primarily only for parenthesis w
+let g:loaded_matchit = 1
+
 "::::==-- BASIC  --==:::: {{{
 "mappings "
 let mapleader = "\<Space>"
-let localmapleader = ","
+" let localmapleader = ","
+let maplocalleader = ","
 
 " disable legacy VI mode
 " default install of VIM are in legacy mode
@@ -47,6 +52,10 @@ let g:ctrlp_show_hidden = 1
 " Persist cache between sessions
 let g:ctrlp_clear_cache_on_exit = 0
 let g:ctrlp_use_caching = 1
+
+" disable local working directory path
+let g:ctrlp_working_path_mode = 0
+
 "let g:ctrlp_mruf_exclude = '/tmp/.*\|/temp/.*|\.ipynb$' " MacOSX/Linux
 "let g:ctrlp_mruf_include = '\.py$\|\.txt$'
 " added to test ginore files
@@ -55,11 +64,24 @@ let g:ctrlp_use_caching = 1
 "  \ 'file': '\.so$\|\.dat$|\.DS_Store$|\.ipynb$,\.swo$'
 "  \ }
 
+" Autocompletion, disabled 11June2021 in favor of kite
+" Plugin 'davidhalter/jedi-vim'
+" " Make jedi run faster
+" let g:jedi#show_call_signatures = "0"  
+" let g:jedi#popup_on_dot = 0
 
 
 
 "-- Vim.WIki
 Plugin 'vimwiki/vimwiki'
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+
+" Real-time markdown preview
+Plugin 'iamcco/markdown-preview.vim'
+
+
+
 
 "-- YouCompleteMe
 "Plugin 'Valloric/YouCompleteMe'
@@ -67,8 +89,12 @@ Plugin 'vimwiki/vimwiki'
 " molokai color scheme
 Plugin 'tomasr/molokai'
 
+ " Solorized
+Plugin 'altercation/vim-colors-solarized'
+
 " vim-tmux navigator
 Plugin 'christoomey/vim-tmux-navigator'
+let g:tmux_navigator_disable_when_zoomed = 1
 
 " Seiya - Make vim Transparent 
 Plugin 'miyakogi/seiya.vim'
@@ -103,10 +129,14 @@ Plugin 'edkolev/tmuxline.vim'
 " Surround.vim to quickly/better wrapping in VIM
 Plugin 'tpope/vim-surround'
 
+" Helps repeat the surround tag
+Plugin 'tpope/vim-repeat'
+
+
 " Vim Python Syntax Highlighter, added #Mar2020
 Plugin 'vim-python/python-syntax'
 let g:python_highlight_all = 1
-
+let g:python_slow_sync = 1
 
     
 " Python VIM Folding, added #Mar2020
@@ -125,42 +155,111 @@ imap <c-x><c-f> <plug>(fzf-complete-path)
 
 " Autoscroll Vim
 " Plugin 'vim-scripts/autoscroll.vim' "Disregarded since not useful
-map <F6> <C-E>:sleep 4000m<CR>j<F6>
-map <F7> <C-Y>:sleep 4000m<CR>k<F7>
+map <F6> <C-E>:sleep 3000m<CR>j<F6>
+map <F7> <C-Y>:sleep 3000m<CR>k<F7>
 
 
 " Jupyter Mode in Vim
-Plugin 'jupyter-vim/jupyter-vim'
+" kPlugin 'jupyter-vim/jupyter-vim'
+" klet g:vim_virtualenv_path = '/home/barca/.pyenv/versions/anaconda3-5.1.0'
+" k" let g:vim_virtualenv_path = '/home/barca/py-env/cong'
+" kif exists('g:vim_virtualenv_path')
+" k    pythonx import os; import vim
+" k    " pythonx activate_this = os.path.join(vim.eval('g:vim_virtualenv_path'), 'bin/activate_this.py')
+" k    pythonx activate_this = os.path.join(vim.eval('g:vim_virtualenv_path'), 'bin/activate')
+" k    pythonx with open(activate_this) as f: exec(f.read(), {'__file__': activate_this})
+" kendif
+" k" let g:python3_host_prog ='/home/barca/.pyenv/versions/anaconda3-5.1.0/bin/python3.6'
+
 " ---- INSTALLED VIRTUAL ENV"
 " Always use the same virtualenv for vim, regardless of what Python
 " environment is loaded in the shell from which vim is launched
-" let g:vim_virtualenv_path = '/home/barca/py-env/jupy-vim'
-" if exists('g:vim_virtualenv_path')
-"     pythonx import os; import vim
-"     pythonx activate_this = os.path.join(vim.eval('g:vim_virtualenv_path'), 'bin/activate')
-"     pythonx with open(activate_this) as f: exec(f.read(), {'__file__': activate_this})
-" endif
-let g:jupyter_mapkeys = 0
+" let g:python3_host_prog ='/home/barca/.pyenv/versions/anaconda3-5.1.0/bin/python3.6'
+"let g:vim_virtualenv_path = '/home/barca/.pyenv/versions/anaconda3-5.1.0'
+"" let g:vim_virtualenv_path = '/home/barca/py-env/jupy-vim'
+"if exists('g:vim_virtualenv_path')
+"    pythonx import os; import vim
+"    pythonx activate_this = os.path.join(vim.eval('g:vim_virtualenv_path'), 'bin/activate')
+"    pythonx with open(activate_this) as f: exec(f.read(), {'__file__': activate_this})
+"endif
+"let g:jupyter_mapkeys = 0
 
 " Always use the same virtualenv for vim, regardless of what Python
 " environment is loaded in the shell from which vim is launched
-let g:vim_virtualenv_path = '/home/barca/py-env/jupy-vim'
-"let g:vim_virtualenv_path = '/usr/bin/anaconda3'
-if exists('g:vim_virtualenv_path')
-    pythonx import os; import vim
-    pythonx activate_this = os.path.join(vim.eval('g:vim_virtualenv_path'), 'bin/activate_this.py')
-    pythonx with open(activate_this) as f: exec(f.read(), {'__file__': activate_this})
-endif
+
+"" disabled for now
+""let g:vim_virtualenv_path = '/home/barca/py-env/ajmc'
+"let g:vim_virtualenv_path = '/home/barca/.pyenv/versions/anaconda3-5.1.0/envs/ajmconda2021'
+"" let g:vim_virtualenv_path = '/home/barca/py-env/jupy-vim'
+""let g:vim_virtualenv_path = '/usr/bin/anaconda3'
+"if exists('g:vim_virtualenv_path')
+"    pythonx import os; import vim
+"    pythonx activate_this = os.path.join(vim.eval('g:vim_virtualenv_path'), 'bin/activate_this.py')
+"    pythonx with open(activate_this) as f: exec(f.read(), {'__file__': activate_this})
+"endif
 
 
-
-
-
-
+" minimap for code
+"Plugin 'wfxr/minimap.vim'
+Plugin 'severin-lemaignan/vim-minimap'
 
 
 " Add icons in NerdTree
 Plugin 'ryanoasis/vim-devicons'
+
+" Indent lines
+" Only useful currently for spaces and NOT tabs
+" color needs to be modified 
+Plugin 'Yggdroot/indentLine'
+" let g:indentLine_char = 1
+" let g:indentLine_setColors = 0
+" let g:indentLine_color_term = 239
+
+
+" FOR testing, navigation on blocks
+Plugin 'andymass/vim-matchup'
+
+" ----------------------------------------------------------
+" vim in mysql
+Plugin 'tpope/vim-dadbod'
+
+
+" Dadbod ui
+Plugin 'kristijanhusak/vim-dadbod-ui'
+let g:dbs = {
+            \ 'AJMCLiveProd': 'mysql://JMPH:JMPhHull1986!@5.198.30.88:3309/data'
+            \ }
+" thse are not working
+let g:db_ui_use_nerd_fonts=1
+let g:db_ui_show_database_icon=1 
+" let g:db_ui_show_database_icon=1 
+
+" plugin mapping
+nmap <Leader>u <Plug>(DBUI_DeleteLine)
+
+
+" ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+" for autocomplete
+" not fully working
+Plugin 'kristijanhusak/vim-dadbod-completion'
+
+" possible this is no longer relevant
+Plugin 'vim-scripts/dbext.vim'
+
+" For built in omnifunc
+autocmd FileType sql setlocal omnifunc=vim_dadbod_completion#omni
+
+" Source is automatically added, you just need to include it in the chain complete list
+let g:completion_chain_complete_list = {
+    \   'sql': [
+    \    {'complete_items': ['vim-dadbod-completion']},
+    \   ],
+    \ }
+" Make sure `substring` is part of this list. Other items are optional for this completion source
+let g:completion_matching_strategy_list = ['exact', 'substring']
+" Useful if there's a lot of camel case items
+let g:completion_matching_ignore_case = 1
+" ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 " Asynchonouse Syntax Chcker
 " Plugin 'w0rp/ale'  "disabled since I did not find this useful
@@ -185,8 +284,17 @@ filetype plugin indent on    " required, equivalent below
 " Put your non-Plugin stuff after this line
 
 " setting for vim-dev icons setting"
-" set guifont=Inconsolata\ Nerd\ Font\ Complete\ 12
+set guifont=Hack\ Nerd\ Font\ Regular\ 10
 set encoding=utf-8
+
+
+" GUI
+set guioptions-=m  "remove menu bar
+set guioptions-=T  "remove toolbar
+
+" Minimap
+let g:minimap_auto_start=1
+
 
 """"""""""""""""""""""""""""""""""""""""""""""}}}
 
@@ -194,8 +302,19 @@ set encoding=utf-8
 
 " set the theme to murhpy
 " applies to gVim only
-colo molokai
+" let g:solarized_termcolors=256
+" let g:solarized_termtrans=1
+" set background=light
+" colorscheme solarized
+" color molokai
 
+if has('gui_running')
+    "    set background=light
+    "    colorscheme solarized
+    color molokai
+else
+    color molokai
+endif
 " font family to Lucide console, for gvim only
 " set guifont=Lucida_Console
 
@@ -285,18 +404,24 @@ nnoremap k gk
 " NERDtree mapping, to go to file location
 nnoremap <leader><c-o> :NERDTreeFind<cr>
 
+" Command for quick directory change
+" remap <leader>cd :cd %:p:h<CR>:pwd<CR>
+command! CDC lcd %:p:h
+" ! character override
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Run current file
-nnoremap <Leader>r :JupyterRunFile<CR>
-" nnoremap <buffer> <silent> <localleader>I :PythonImportThisFile<CR>
-
-" Change to directory of current file
-nnoremap <buffer> <silent> <localleader>d :JupyterCd %:p:h<CR>
-
-" Send a selection of lines
-nnoremap <Leader>e :JupyterSendCell<CR>
-" nnoremap <buffer> <silent> <localleader>E :JupyterSendRange<CR>
+" " Run current file
+" nnoremap <Leader>r :JupyterRunFile<CR>
+" " nnoremap <buffer> <silent> <localleader>I :PythonImportThisFile<CR>
+" 
+" " Change to directory of current file
+" nnoremap <buffer> <silent> <localleader>d :JupyterCd %:p:h<CR>
+" 
+" " Send a selection of lines
+" nnoremap <Leader>e :JupyterSendCell<CR>
+" " nnoremap <buffer> <silent> <localleader>E :JupyterSendRange<CR>
+" nmap     <buffer> <localleader>E <Plug>JupyterRunTextObj
 " nmap     <buffer> <silent> <localleader>e <Plug>JupyterRunTextObj
 " vmap     <buffer> <silent> <localleader>e <Plug>JupyterRunVisual
 " 
@@ -307,23 +432,39 @@ nnoremap <Leader>e :JupyterSendCell<CR>
 
 """"""""""""""""""""
 
-" Run current file
-" nnoremap <buffer> <silent> <localleader>R :JupyterRunFile<CR>
-" nnoremap <buffer> <silent> <localleader>I :PythonImportThisFile<CR>
+" temujim Custom Mapping
+" -----------------------
+
+" " Run Current file (this is still buggy)
+" nnoremap <buffer> <localleader>R :JupyterRunFile<CR> 
 " 
-" " Change to directory of current file
+" " Change to directory of current file (still buggy)
 " nnoremap <buffer> <silent> <localleader>d :JupyterCd %:p:h<CR>
 " 
-" " Send a selection of lines
-" nnoremap <buffer> <silent> <localleader>X :JupyterSendCell<CR>
-" nnoremap <buffer> <silent> <localleader>E :JupyterSendRange<CR>
-" nmap     <buffer> <silent> <localleader>e <Plug>JupyterRunTextObj
-" vmap     <buffer> <silent> <localleader>e <Plug>JupyterRunVisual
+" " Run current line
+" " nnoremap <buffer> <Leader>e :JupyterSendRange<CR>
+" nnoremap <Leader>e :JupyterSendRange<CR>
 " 
+" " Run cell
+" nnoremap <Leader>E :JupyterSendCell<CR>
+" " nnoremap <buffer> <Leader>E :JupyterSendCell<CR>
+" 
+" " Run file navigate
+" nmap     <buffer> <silent> <localleader>e <Plug>JupyterRunTextObj
+" 
+" " Run Highlighted file
+" " vmap     <buffer> <silent> <localleader>e <Plug>JupyterRunVisual
+" vmap <Leader>e <Plug>JupyterRunVisual "updated for simplicity
+" updated for simplicity
+" " vmap <localleader>e <Plug>JupyterRunVisual
+" 
+" 
+" " Defaults which might be usefl 
 " nnoremap <buffer> <silent> <localleader>U :JupyterUpdateShell<CR>
 " 
 " " Debugging maps
 " nnoremap <buffer> <silent> <localleader>b :PythonSetBreak<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
@@ -503,11 +644,11 @@ hi clear VertSplit   " make border color white
   autocmd BufWinEnter *.* silent loadview
 "augroup END
 
-set foldmethod=marker
+"set foldmethod=marker
 "set foldmethod=manual
-" set foldmethod=indent
+set foldmethod=indent
  
-""""""""""""""""""""""""""""""""""""""""""""""}}}
+"""""""""""""""""""""""""""""""""""""""""""""}}}
 
 ":::==-- VIM Scripts --==::: {{{
 
@@ -550,6 +691,9 @@ augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""}}}
 
-if exists("g:loaded_webdevicons")
-  call webdevicons#refresh()
-endif
+":::==-- Load WebDevicons --==::: {{{
+" if exists("g:loaded_webdevicons")
+"   call webdevicons#refresh()
+" endif
+
+"""""""""""""""""""""""""""""""""""""""""""""}}}

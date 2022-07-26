@@ -305,3 +305,30 @@ motivate | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | lolcat
 
 # Virtual ENV James May2020
 VIRTUAL_ENV_DISABLE_PROMPT=1
+
+export PYENV_VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# pyenv, allow different python versions Nov2020
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+# added 3June, to shift the global
+# https://askubuntu.com/questions/682869/how-do-i-install-a-different-python-version-using-apt-get
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+
+# AJMC env
+# alias ajmconda="/home/barca/py-env/ajmc/bin/jupyter"
+
+# alias for jupyter, May2021
+# alias pip='/home/barca/anaconda3/bin/pip'
+# alias jupyter='/home/barca/anaconda3/bin/jupyter'
+
+
+
+# added 2June2021 due to issue
+# Remove for testing only 
+# alias jupyter=/home/barca/.pyenv/versions/anaconda3-5.1.0/bin/jupyter
+#
+#
