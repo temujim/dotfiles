@@ -652,6 +652,9 @@ set foldmethod=indent
 
 ":::==-- VIM Scripts --==::: {{{
 
+" increment/decrement
+set nrformats+=alpha "include alphabets increment/decrement
+
 """""""""""""""""""""""""""""""""
 " Script to insert multiple lines
 """""""""""""""""""""""""""""""""
